@@ -1,0 +1,55 @@
+:root {
+
+}
+
+* { 
+    /* Apply everywhere */
+    font
+
+}
+
+body {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.display {
+    border-style: solid;
+    border-width: 2px;
+    border-color: black;
+    width: 396px;
+}
+
+.display-equation {
+    display: flex;
+    height: 50px;
+    align-items: flex-end;
+    justify-content: start;
+    font-size: xx-large;
+}
+
+.display-current {
+    display: flex;
+    height: 50px;
+    align-items: flex-end;
+    justify-content: end;
+    font-size: xx-large;
+}
+
+#keypad {
+    display: grid;
+    width: 400px;
+    height: 500px;
+    background-color: gray;
+}
+
+.key {
+    display: flex;
+    width: auto;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+    border-style: solid;
+    border-width: 1px;
+}

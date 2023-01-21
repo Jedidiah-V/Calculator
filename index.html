@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="calculator">
+        <div class="display">
+            <div class="display-equation"></div>
+            <div class="display-current"></div>
+        </div>
+        <div id="keypad">
+            <button id="C" class="key editor" style="grid-area: 1 / 1 / auto / auto;">C</button>
+            <button id="CE" class="key editor" style="grid-area: 1 / 2 / auto / auto;">CE</button>
+            <button id="backspace" class="key editor" style="grid-area: 1 / 3 / auto / auto;">BK</button>
+            <button id="/" class="key operator" style="grid-area: 1 / 4 / auto / auto;">/</button>
+            <button id="7" class="key number" style="grid-area: 2 / 1 / auto / auto;">7</button>
+            <button id="8" class="key number" style="grid-area: 2 / 2 / auto / auto;">8</button>
+            <button id="9" class="key number" style="grid-area: 2 / 3 / auto / auto;">9</button>
+            <button id="*" class="key operator" style="grid-area: 2 / 4 / auto / auto;">*</button>
+            <button id="4" class="key number" style="grid-area: 3 / 1 / auto / auto;">4</button>
+            <button id="5" class="key number" style="grid-area: 3 / 2 / auto / auto;">5</button>
+            <button id="6" class="key number" style="grid-area: 3 / 3 / auto / auto;">6</button>
+            <button id="-" class="key operator" style="grid-area: 3 / 4 / auto / auto;">-</button>
+            <button id="1" class="key number" style="grid-area: 4 / 1 / auto / auto;">1</button>
+            <button id="2" class="key number" style="grid-area: 4 / 2 / auto / auto;">2</button>
+            <button id="3" class="key number" style="grid-area: 4 / 3 / auto / auto;">3</button>
+            <button id="+" class="key operator" style="grid-area: 4 / 4 / auto / auto;">+</button>
+            <button id="+/-" class="key" style="grid-area: 5 / 1 / auto / auto;">+/-</button>
+            <button id="0" class="key number" style="grid-area: 5 / 2 / auto / auto;">0</button>
+            <button id="." class="key number" style="grid-area: 5 / 3 / auto / auto;">.</button>
+            <button id="=" class="key operator" style="grid-area: 5 / 4 / auto / auto;">=</button>
+
+        </div>
+    </div>
+    <p>C: Clear all stored values</p>
+    <p>CE: Clear (current) Entry</p>
+    <p>BK: Backspace</p>
+    <script src="script.js"></script>
+</body>
+</html>
