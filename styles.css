@@ -4,7 +4,7 @@
 
 * { 
     /* Apply everywhere */
-    font
+    font-size: xx-large;
 
 }
 
@@ -24,17 +24,16 @@ body {
 .display-equation {
     display: flex;
     height: 50px;
-    align-items: flex-end;
-    justify-content: start;
-    font-size: xx-large;
+    align-items: center;
+    align-items: flex-start;
 }
 
-.display-current {
+.display-result {
     display: flex;
     height: 50px;
-    align-items: flex-end;
-    justify-content: end;
-    font-size: xx-large;
+    align-items: center;
+    justify-content: flex-end;
+
 }
 
 #keypad {

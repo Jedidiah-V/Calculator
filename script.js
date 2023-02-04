@@ -29,31 +29,33 @@ function operate(operator, num1, num2) {
         return multiply (num1, num2);
     } else if (operator == "/") {
         return divide(num1, num2);
+    } else if (operator == '=') {
     } else {
         return "What operator is this?";
     }
 }
 
-
 let numKeys = document.querySelectorAll('.number');
 let opKeys = document.querySelectorAll('.operator');
+let modifiers = document.querySelectorAll('.modifier');
 let backspace = document.querySelector('#backspace');
-let clearEntry = document.querySelector('#CE');
-let clear = document.querySelector('#C');
+let clear = document.querySelector('#clear');
 
 let keypad = document.getElementById('keypad');
 // let keyArray = ['C','CE','backspace','/','7','8','9','*','4','5','6','-','1','2','3','+','+/-','0','.','='];
 let equationDisplay = document.querySelector(".display-equation");
-let currentDisplay = document.querySelector(".display-current");
+let resultDisplay = document.querySelector(".display-result");
 
+let equation = [];
 let currentValue = [];
 let operator = '';
 let num1 = 0;
 let num2 = 0;
 let total = 0;
-let numPressed = false;
-let first = true;
-let newPair = true;
+let percent = false;
+let firstNum = true;
+let neg = false;
+let equaled = false;
 
 /* Add digits (and decimal) to currentValue if number keys are pressed */
 
@@ -63,52 +65,104 @@ function addNumListeners() {
     }
 }
 
+function removeNumListeners() {
+    for (let i = 0; i < numKeys.length; i++) {
+        numKeys[i].removeEventListener('click', pushCurrentValue);
+    }
+}
+
+function iterateCurrent(string) {
+    digit = Number(string);
+    currentValue.push(digit); 
+    resultDisplay.textContent = currentValue.join('');
+}
+
 addNumListeners();
 
 function pushCurrentValue(e) {
     switch (e.target.id) {
         case "1":
-            currentValue.push(1);
+            iterateCurrent("1");
             break;
         case "2":
-            currentValue.push(2);
+            iterateCurrent("2");
             break;
         case "3":
-            currentValue.push(3);
+            iterateCurrent("3");
             break;
         case "4":
-            currentValue.push(4);
+            iterateCurrent("4");
             break;
         case "5":
-            currentValue.push(5);
+            iterateCurrent("5");
             break;
         case "6":
-            currentValue.push(6);
+            iterateCurrent("6");
             break;
         case "7":
-            currentValue.push(7);
+            iterateCurrent("7");
             break;
         case "8":
-            currentValue.push(8);
+            iterateCurrent("8");
             break;
         case "9":
-            currentValue.push(9);
+            iterateCurrent("9");
             break;
         case "0":
-            currentValue.push(0);
-            break;
-        case ".":
-            currentValue.push('.');
+            iterateCurrent("0");
             break;
         default:
             currentValue = "?";
+            resultDisplay.textContent = currentValue.join('');
     }
-    numPressed = true;
-    // Update the display's "current" row with the number in progress
-    currentDisplay.textContent = currentValue.join(''); 
-    // Activate the opKeys
     addOpKeyListeners();
 };
+
+/* Add modifiers that affect currentValue if pressed */
+
+function addModListeners() {
+    for (let i = 0; i < modifiers.length; i++) {
+        modifiers[i].addEventListener('click', modify);
+    }
+}
+
+addModListeners();
+
+function modify(e) {
+    switch (e.target.id) {
+    case ".":
+        if (currentValue != []) {
+            currentValue.push("."); 
+            resultDisplay.textContent = currentValue.join('');
+            modifiers[2].removeEventListener('click', modify);
+        }
+        break;
+    case "+/-":
+        if (neg == false) {
+            currentValue.unshift("-");
+            resultDisplay.textContent = currentValue.join('');
+            neg = true;
+        } else {
+            currentValue.shift();
+            resultDisplay.textContent = currentValue.join('');
+            neg = false;
+        }
+        break;
+    case "%":
+        if (percent == false) {
+            resultDisplay.textContent = currentValue.join('') + '%';
+            currentValue = currentValue.join('')/100;
+            currentValue = String(currentValue).split('');
+            percent = true;
+        } else if (percent == true) {
+            currentValue = Math.round(currentValue.join('')*1000000)/10000;
+            currentValue = String(currentValue).split('');
+            resultDisplay.textContent = currentValue.join('');
+            percent = false;
+        }
+        break;
+    }
+}
 
 /* Add operators to the equation if opKeys are pressed */
 
@@ -118,118 +172,144 @@ function addOpKeyListeners() {
     }
 }
 
+addOpKeyListeners();
+
 function removeOpKeyListeners() {
     for (let i = 0; i < opKeys.length; i++) {
         opKeys[i].removeEventListener('click', defineOp);
     }
 }
 
-function firstOp(first, op) {
-    if (first == true) {
-        operator = op;
+function iterateEquation(num1, op) {
+    operator = op;
+    equation = [];
+    if (percent == true) {
+        equation.push(num1*100 + '%');
+    } else {
+        equation.push(Math.round(num1*10000)/10000);
     }
-    return operator;
+    equation.push(operator);
+    equationDisplay.textContent = equation.join(' ');
+    resultDisplay.textContent = '';
+    currentValue = [];
+}
+
+function executeOp(op) {    
+    if (firstNum == true) { 
+        // Establish the first total and start the equation
+        num1 = Number(currentValue.join(''));
+        total = num1;
+        iterateEquation(num1, op);
+        firstNum = false;
+    } else if (equaled == true) {
+        // If the previous operation was an equals sign
+        modifiers[2].addEventListener('click', modify);
+        num1 = total;
+        iterateEquation(num1, op);
+        equaled = false;
+    } else { 
+        // Input second term and iterate the total if another operator is pressed
+        modifiers[2].addEventListener('click', modify);
+        num1 = total;
+        num2 = Math.round(Number(currentValue.join(''))*10000)/10000;
+        total = operate(operator, num1, num2);
+        num1 = total;
+        iterateEquation(num1, op);
+        if (total == Infinity) {
+            resultDisplay.textContent = 'To Infinity, and Beyond!';
+        }
+    }
 }
 
 function defineOp(e) {
-    switch (e.target.id) {
-        case "+":
-            operator = firstOp(first, "+");
-            executeOp(operator);
-            operator = "+"
-            break;
-        case "-":
-            operator = firstOp(first, "-");
-            executeOp(operator);
-            operator = "-"
-            break;
-        case "*":
-            operator = firstOp(first, "*");
-            executeOp(operator);
-            operator = "*"
-            break;
-        case "/":
-            operator = firstOp(first, "/");
-            executeOp(operator);
-            operator = "/"
-            break;
-        case "=":
-            if (operator == '') { // If "=" is the first operator pressed, giving an identity equation
-                // pastValue = currentValue;
-                equationDisplay.textContent = currentValue.join('') + " =";
-                currentValue = [];
-            } else { // If any other operator is pressed first, then "="
-                num1 = total;
-                num2 = Number(currentValue.join(''));
-                total = operate(operator, num1, num2);
-                if (total == Infinity) {
-                    currentDisplay.textContent = 'To Infinity, and Beyond!';
+    // Treat an empty current value as not being ready to proceed
+    if (currentValue != []) { 
+        switch (e.target.id) {
+            case "+":
+                executeOp("+");
+                break;
+            case "-":
+                executeOp("-");
+                break;
+            case "*":
+                executeOp("*");
+                break;
+            case "/":
+                executeOp("/");
+                break;
+            case "=":
+                if (operator == '' && firstNum == true) { 
+                    // If "=" is the first operator pressed, giving an identity equation
+                    total = Math.round(currentValue.join('')*10000)/10000;
+                    if (percent == true) {
+                        equation.push(total*100 + '%');
+                    } else {
+                        equation.push(Math.round(total*10000)/10000);
+                    }
+                    equation.push('=');
+                    equationDisplay.textContent = equation.join(' ');
+                    resultDisplay.textContent = currentValue.join('');
+                    currentValue = [];
+                    equaled = true;
+                    firstNum = false;
+                    opKeys[4].removeEventListener('click', defineOp);
+                } else { 
+                    // If any other operator is pressed first, then "="
+                    modifiers[2].addEventListener('click', modify);
+                    num2 = Number(currentValue.join(''));
+                    if (percent == true) {
+                        equation.push(num2*100 + '%');
+                    } else {
+                        equation.push(num2);
+                    }
+                    equation.push("=");
+                    equationDisplay.textContent = equation.join(' ');
+                    total = operate(operator, num1, num2), 10;
+                    resultDisplay.textContent = Math.round(total*10000)/10000;
+                    if (total == Infinity) {
+                        resultDisplay.textContent = 'To Infinity, and Beyond!';
+                    }
+                    currentValue = String(total).split("").map((total)=>{
+                        return total;
+                    });
+                    equaled = true;
+                    opKeys[4].removeEventListener('click', defineOp);
                 }
-                equationDisplay.textContent = num1 + ' ' + operator + ' ' + num2 + ' =';
-                currentDisplay.textContent = total;
-                num1 = total;
-                num2 = Number(currentValue.join(''));
-                currentValue = [];
-            }
-            break;
-        default:
-            operator = "?"
-    }
-    numPressed = false;
-}
-
-function executeOp(nextOp) { // If operations are being chained before pressing "="
-    if (currentValue == []) { // Treat an empty current value as zero
-        currentValue = [0];
-    }
-    if (first == true) { // Establish the first total
-        total = Number(currentValue.join(''));
-        equationDisplay.textContent = total + " " + nextOp;
-        op = nextOp;
-        first = false;
-        newPair = false;
-    } else {
-        if (newPair == true) { // Starting a new binomial
-            equationDisplay.textContent = total + " " + nextOp;
-            op = nextOp;
-            newPair = false;
-        } else { // Completing the binomial before pressing the next operator
-            num1 = total;
-            num2 = Number(currentValue.join(''));
-            total = operate(op, num1, num2);
-            equationDisplay.textContent = num1 + " " + op + ' ' + num2;
-            currentDisplay.textContent = total;
-            op = nextOp;
-            newPair = true;
+                break;
+            default:
+                resultDisplay.textContent = "?";
         }
     }
-    currentValue = [];
-    removeOpKeyListeners();
-    return op;
+    neg = false; // Reset +/- function after each operation
+    percent = false; // Reset %
 }
 
 /* Add data clearing functionality */
 
-backspace.addEventListener('click', () => {
-    currentValue.pop();
-    currentDisplay.textContent = currentValue.join(''); 
-});
-
-clearEntry.addEventListener('click', () => {
-    currentValue = [];
-    currentDisplay.textContent = currentValue.join(''); 
+backspace.addEventListener('click', () => { // Investigate how percent behaves here
+    if (percent == true) {
+        currentValue.pop()
+        resultDisplay.textContent = currentValue.join('')*100 + '%'; 
+    } else {
+        currentValue.pop()
+        resultDisplay.textContent = currentValue.join(''); 
+    };
 });
 
 clear.addEventListener('click', () => {
+    modifiers[2].addEventListener('click', modify);
     currentValue = [];
-    currentDisplay.textContent = currentValue.join(''); 
-    total = 0;
+    resultDisplay.textContent = currentValue.join(''); 
     num1 = 0;
-    num2 = 0;
-    equationDisplay.textContent = '';
-    currentDisplay.textContent = '';
     operator = '';
-    first = true;
-    newPair = true;
-    numPressed = false;
+    num2 = 0;
+    total = 0;
+    equation = [];
+    equationDisplay.textContent = equation.join(' ');
+    percent = false;
+    firstNum = true;
+    neg = false;
+    equaled = false;
+    removeOpKeyListeners();
+    addNumListeners();
 });
