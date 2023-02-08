@@ -42,7 +42,6 @@ let backspace = document.querySelector('#backspace');
 let clear = document.querySelector('#clear');
 
 let keypad = document.getElementById('keypad');
-// let keyArray = ['C','CE','backspace','/','7','8','9','*','4','5','6','-','1','2','3','+','+/-','0','.','='];
 let equationDisplay = document.querySelector(".display-equation");
 let resultDisplay = document.querySelector(".display-result");
 
@@ -56,6 +55,7 @@ let percent = false;
 let firstNum = true;
 let neg = false;
 let equaled = false;
+let maxDigits = 14;
 
 /* Add digits (and decimal) to currentValue if number keys are pressed */
 
@@ -74,6 +74,9 @@ function removeNumListeners() {
 function iterateCurrent(string) {
     digit = Number(string);
     currentValue.push(digit); 
+    if (currentValue.length == maxDigits) {
+        removeNumListeners();
+    }
     resultDisplay.textContent = currentValue.join('');
 }
 
@@ -148,7 +151,7 @@ function modify(e) {
             neg = false;
         }
         break;
-    case "%":
+    case "%": 
         if (percent == false) {
             resultDisplay.textContent = currentValue.join('') + '%';
             currentValue = currentValue.join('')/100;
@@ -184,7 +187,12 @@ function iterateEquation(num1, op) {
     operator = op;
     equation = [];
     if (percent == true) {
-        equation.push(num1*100 + '%');
+        // Keeps the displayed digits within limits
+        if (currentValue.length >= maxDigits) { 
+            equation.push((num1*100).toExponential(2) + '%');
+        } else  {
+            equation.push(num1*100 + '%');
+        }
     } else {
         equation.push(Math.round(num1*10000)/10000);
     }
@@ -196,7 +204,8 @@ function iterateEquation(num1, op) {
 
 function executeOp(op) {    
     if (firstNum == true) { 
-        // Establish the first total and start the equation
+        // Establishes the first total and start the equation
+        modifiers[2].addEventListener('click', modify);
         num1 = Number(currentValue.join(''));
         total = num1;
         iterateEquation(num1, op);
@@ -208,7 +217,7 @@ function executeOp(op) {
         iterateEquation(num1, op);
         equaled = false;
     } else { 
-        // Input second term and iterate the total if another operator is pressed
+        // Inputs second term and iterates the total if another operator is pressed
         modifiers[2].addEventListener('click', modify);
         num1 = total;
         num2 = Math.round(Number(currentValue.join(''))*10000)/10000;
@@ -219,10 +228,19 @@ function executeOp(op) {
             resultDisplay.textContent = 'To Infinity, and Beyond!';
         }
     }
+    addNumListeners();
 }
 
+function limitDigits(currentValue) {
+    // Keeps the displayed digits within limits
+    if (currentValue.length >= maxDigits) { 
+        resultDisplay.textContent = total.toExponential(2);
+    } else  {
+        resultDisplay.textContent = Math.round(total*10000)/10000;
+    }
+}
 function defineOp(e) {
-    // Treat an empty current value as not being ready to proceed
+    // Treats an empty current value as not being ready to proceed
     if (currentValue != []) { 
         switch (e.target.id) {
             case "+":
@@ -248,11 +266,12 @@ function defineOp(e) {
                     }
                     equation.push('=');
                     equationDisplay.textContent = equation.join(' ');
-                    resultDisplay.textContent = currentValue.join('');
+                    limitDigits(currentValue);
                     currentValue = [];
                     equaled = true;
                     firstNum = false;
                     opKeys[4].removeEventListener('click', defineOp);
+                    removeNumListeners();
                 } else { 
                     // If any other operator is pressed first, then "="
                     modifiers[2].addEventListener('click', modify);
@@ -264,30 +283,30 @@ function defineOp(e) {
                     }
                     equation.push("=");
                     equationDisplay.textContent = equation.join(' ');
-                    total = operate(operator, num1, num2), 10;
-                    resultDisplay.textContent = Math.round(total*10000)/10000;
+                    total = operate(operator, num1, num2);
+                    currentValue = String(total).split("");
+                    limitDigits(currentValue);
                     if (total == Infinity) {
                         resultDisplay.textContent = 'To Infinity, and Beyond!';
                     }
-                    currentValue = String(total).split("").map((total)=>{
-                        return total;
-                    });
                     equaled = true;
                     opKeys[4].removeEventListener('click', defineOp);
+                    removeNumListeners();
                 }
                 break;
             default:
                 resultDisplay.textContent = "?";
         }
     }
-    neg = false; // Reset +/- function after each operation
-    percent = false; // Reset %
+    neg = false; // Resets +/- function after each operation
+    percent = false; // Resets %
 }
 
 /* Add data clearing functionality */
 
-backspace.addEventListener('click', () => { // Investigate how percent behaves here
+backspace.addEventListener('click', () => { 
     if (percent == true) {
+        // Backspacing a percent value pops the actual currentValue 
         currentValue.pop()
         resultDisplay.textContent = currentValue.join('')*100 + '%'; 
     } else {

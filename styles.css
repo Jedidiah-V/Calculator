@@ -1,54 +1,116 @@
-:root {
-
-}
-
-* { 
-    /* Apply everywhere */
-    font-size: xx-large;
-
+* {  /* Applies everywhere */
+    font-size: 49px;
 }
 
 body {
     display: flex;
     flex-flow: column;
     align-items: center;
+    justify-content: center;
+    height: 1500px;
+    /* Image from wallpapercave.com, uploaded by sauware */
+    background-image: url('images/orange arithmetic.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 4800px 3000px;
+    background-color:chocolate;
+}
+
+.calculator {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    border-style: double;
+    border-width: 20px;
+    border-radius: 50px;
+    border-color:firebrick;
+    background-color:darkorange ;
+    padding: 30px;
+    box-shadow: -4px -2px 5px 3px rgba(0,0,0,0.71);
+}
+
+p {
+    text-align: center;
+    text-transform:uppercase;
+    font-family:'Courier New', Courier, monospace;
+    color: seashell;
+    font-size: 54px;
+    font-weight: bolder;
+    margin-top: 0px;
+    margin-bottom: 24px;
 }
 
 .display {
     border-style: solid;
-    border-width: 2px;
+    border-width: 0px;
     border-color: black;
-    width: 396px;
+    border-radius: 16px;
+    width: 420px;
+    background-color: antiquewhite;
+    padding: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    box-shadow: inset -3px 0px 10px 3px rgba(0,0,0,0.71);
+    margin-bottom: 20px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .display-equation {
     display: flex;
-    height: 50px;
-    align-items: center;
+    height: 135px;
     align-items: flex-start;
 }
 
 .display-result {
     display: flex;
-    height: 50px;
-    align-items: center;
+    height: 100px;
+    align-items: flex-end;
     justify-content: flex-end;
-
 }
 
 #keypad {
     display: grid;
-    width: 400px;
-    height: 500px;
-    background-color: gray;
+    width: 480px;
+    height: 600px;
+    background-color: darkorange;
 }
 
 .key {
     display: flex;
-    width: auto;
-    height: auto;
+    width: 100px;
+    height: 100px;
     align-items: center;
     justify-content: center;
-    border-style: solid;
-    border-width: 1px;
+    border: groove seashell;
+    border-width: 4px;
+    background-color:seashell;
+    margin: 11px;
+    border-radius: 25px;
+    box-shadow: -8px -3px 5px 3px rgba(0,0,0,0.71);
+}
+
+.key:hover { /* Thanks to my brother, Jeremiah */
+    box-shadow: -5px -2px 4px 2px rgba(0,0,0,0.71);
+}
+
+.key:active { 
+    box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.71);
+}
+
+.operator {
+    background-color:yellow ;
+    border: groove yellow;
+    border-width: 4px;
+}
+
+.modifier {
+    background-color:chartreuse;
+    border: groove chartreuse;
+    border-width: 4px;
+}
+
+.editor {
+    background-color:cornflowerblue;
+    border: groove cornflowerblue;
+    border-width: 4px;
 }
