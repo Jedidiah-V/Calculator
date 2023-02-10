@@ -7,12 +7,13 @@ body {
     flex-flow: column;
     align-items: center;
     justify-content: center;
-    height: 1200px;
+    height: 960px;
     /* Image from wallpapercave.com, uploaded by sauware */
     background-image: url('images/orange arithmetic.jpg');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 2400px 1500px;
+    /* background-size: 2400px 1500px; */
+    background-size: 1920px 1080px;
     background-color:chocolate;
 }
 
