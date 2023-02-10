@@ -1,5 +1,5 @@
 * {  /* Applies everywhere */
-    font-size: 49px;
+    font-size: 25px;
 }
 
 body {
@@ -7,12 +7,12 @@ body {
     flex-flow: column;
     align-items: center;
     justify-content: center;
-    height: 1000px;
+    height: 1200px;
     /* Image from wallpapercave.com, uploaded by sauware */
     background-image: url('images/orange arithmetic.jpg');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 4800px 3000px;
+    background-size: 2400px 1500px;
     background-color:chocolate;
 }
 
@@ -21,11 +21,11 @@ body {
     flex-flow: column;
     align-items: center;
     border-style: double;
-    border-width: 20px;
-    border-radius: 50px;
+    border-width: 10px;
+    border-radius: 25px;
     border-color:firebrick;
     background-color:darkorange ;
-    padding: 30px;
+    padding: 15px;
     box-shadow: -4px -2px 5px 3px rgba(0,0,0,0.71);
 }
 
@@ -34,58 +34,58 @@ p {
     text-transform:uppercase;
     font-family:'Courier New', Courier, monospace;
     color: seashell;
-    font-size: 54px;
+    font-size: 27px;
     font-weight: bolder;
     margin-top: 0px;
-    margin-bottom: 24px;
+    margin-bottom: 12px;
 }
 
 .display {
     border-style: solid;
     border-width: 0px;
     border-color: black;
-    border-radius: 16px;
-    width: 420px;
+    border-radius: 8px;
+    width: 210px;
     background-color: antiquewhite;
-    padding: 10px;
-    padding-right: 20px;
-    padding-left: 20px;
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
     box-shadow: inset -3px 0px 10px 3px rgba(0,0,0,0.71);
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 .display-equation {
     display: flex;
-    height: 135px;
+    height: 65px;
     align-items: flex-start;
 }
 
 .display-result {
     display: flex;
-    height: 100px;
+    height: 50px;
     align-items: flex-end;
     justify-content: flex-end;
 }
 
 #keypad {
     display: grid;
-    width: 480px;
-    height: 600px;
+    width: 240px;
+    height: 300px;
     background-color: darkorange;
 }
 
 .key {
     display: flex;
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     align-items: center;
     justify-content: center;
     border: groove seashell;
     border-width: 4px;
     background-color:seashell;
-    margin: 11px;
-    border-radius: 25px;
+    margin: 5px;
+    border-radius: 12px;
     box-shadow: -8px -3px 5px 3px rgba(0,0,0,0.71);
 }
 
